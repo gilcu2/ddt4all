@@ -589,6 +589,7 @@ class ELM:
             # Purge unread data
             self.port.expect(">")
             res = self.send_raw("ATZ")
+            print(f'res: {res}')
             module_name = res.split("\n")[3]
             print(f"Module '{module_name}' module detected.")
             if module_name in supported_modules:
