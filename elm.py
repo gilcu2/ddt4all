@@ -567,6 +567,8 @@ class ELM:
             self.portName = portName
             self.adapter_type = adapter_type
 
+            supported_modules = ["ELM", "OBDII"]
+
             if not options.simulation_mode:
                 self.port = Port(portName, speed, self.portTimeout)
 
@@ -587,15 +589,18 @@ class ELM:
             # Purge unread data
             self.port.expect(">")
             res = self.send_raw("ATZ")
-            if not 'ELM' in res:
-                options.elm_failed = True
-                options.last_error = _("No ELM interface on port") + " %s" % portName
-            else:
+            module_name = res.split("\n")[3]
+            print(f"Module '{module_name}' module detected.")
+            if module_name in supported_modules:
                 options.last_error = ""
                 options.elm_failed = False
                 self.connectionStatus = True
                 rate = speed
                 break
+            else:
+                print(f"Module '{module_name}' not supported.")
+                options.elm_failed = True
+                options.last_error = _("No ELM interface on port") + " %s" % portName
 
         try:
             maxspeed = int(maxspeed)
