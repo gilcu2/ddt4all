@@ -567,7 +567,7 @@ class ELM:
             self.portName = portName
             self.adapter_type = adapter_type
 
-            supported_modules = ["ELM", "OBDII"]
+            supported_modules = ["ELM", "OBDII", 'OBDII  v1.5']
 
             if not options.simulation_mode:
                 self.port = Port(portName, speed, self.portTimeout)
@@ -587,7 +587,7 @@ class ELM:
             self.ATCFC0 = options.opt_cfc0
 
             # Purge unread data
-            self.port.expect(">")
+            # self.port.expect(">")
             res = self.send_raw("ATZ")
             print(f'res: {res}')
             module_name = res.split("\n")[3]
